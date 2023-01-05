@@ -1,12 +1,18 @@
-import { Sequelize } from 'sequelize';
-import { config } from '../config/index';
+import { DataSource } from 'typeorm';
+import { config } from '../config';
+import { User } from './entities/User';
 
-export const sequelize = new Sequelize(config.dbUrl, {
-  dialect: 'postgres',
+export const AppDataSource = new DataSource({
+  type: 'postgres',
+  host: config.dbHost,
+  username: config.dbUser,
+  password: config.dbPassword,
+  port: Number(config.dbPort),
+  database: config.dbName,
+  entities: [User],
   logging: true,
-  dialectOptions: {
-    ssl: {
-      rejectUnathorized: true,
-    },
-  },
+  synchronize: true,
+  ssl: {
+    rejectUnauthorized: true
+  }
 });
