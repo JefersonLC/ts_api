@@ -4,4 +4,8 @@ export type NewUser = {
   email: string;
   password: string;
   repeat_password: string;
-}
+};
+
+export type FindUser = {
+  id: string;
+};
