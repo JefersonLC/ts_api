@@ -1,8 +1,9 @@
 import 'reflect-metadata';
-import express, { Request, Response } from 'express';
-// import { ReqBody } from './interfaces/iIndex';
+import express from 'express';
+import cors from 'cors';
 import { AppDataSource } from './db';
-import { User } from './db/entities/User';
+import { apiRouter } from './routes';
+import { logError } from './middlewares/errors';
 
 const app = express();
 
@@ -20,16 +21,9 @@ app.listen(PORT, () => {
   console.log(`Server on port ${PORT}`);
 });
 
+app.use(cors());
 app.use(express.json());
 
-app.get('/', async (_req: Request, res: Response) => {
-  const users = await AppDataSource.getRepository(User).find()
-  res.status(200).json(users);
-});
+app.use('/api/store/', apiRouter);
 
-app.post('/', async (req: Request, res: Response) => {
-  const body = req.body;
-  const user = AppDataSource.getRepository(User).create(body)
-  const result = await AppDataSource.getRepository(User).save(user)
-  res.json(result)
-});
+app.use(logError);
