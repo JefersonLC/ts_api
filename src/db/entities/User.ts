@@ -54,7 +54,7 @@ export class User {
 
   @Column({
     type: 'boolean',
-    default: true,
+    default: false,
     nullable: false,
     name: 'is_admin',
   })
