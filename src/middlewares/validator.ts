@@ -16,12 +16,14 @@ export function bodyValidator(
   };
 }
 
-// export function paramsValidator(body: NewUser, schema: Joi.ObjectSchema<any>) {
-//   return (_req: Request, _res: Response, next: NextFunction) => {
-//     const { error } = schema.validate(body, { abortEarly: false });
-//     if (error) {
-//       next(boom.badData('${error}'));
-//     }
-//     next();
-//   };
-// }
+export function paramsValidator(schema: Joi.ObjectSchema<any>) {
+  return (req: Request, _res: Response, next: NextFunction) => {
+    const params = req.params;
+    console.log(params);
+    const { error } = schema.validate(params, { abortEarly: false });
+    if (error) {
+      next(boom.badData('Bad Data', error));
+    }
+    next();
+  };
+}
