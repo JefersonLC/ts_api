@@ -2,15 +2,16 @@ import boom from '@hapi/boom';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import ShortUniqueId from 'short-unique-id';
+import { UpdateResult } from 'typeorm';
 import { config } from '../config';
 import { AppDataSource } from '../db';
 import { User } from '../db/entities/User';
-import { NewUser } from '../types/user';
+import { NewUser, UpdateUser } from '../types/user';
 
 const uid: ShortUniqueId = new ShortUniqueId({ length: 10 });
 
 export default class UserService {
-  async find(): Promise<User[]> {
+  async findAll(): Promise<User[]> {
     const users: User[] = await AppDataSource.getRepository(User).find({
       select: {
         id: true,
@@ -24,8 +25,8 @@ export default class UserService {
     return users;
   }
 
-  async findById(id: string): Promise<User[]> {
-    const user: User[] = await AppDataSource.getRepository(User).find({
+  async findById(id: string): Promise<User> {
+    const [user]: User[] = await AppDataSource.getRepository(User).find({
       select: {
         id: true,
         name: true,
@@ -53,7 +54,7 @@ export default class UserService {
     return user;
   }
 
-  async create(data: NewUser): Promise<User> {
+  async createUser(data: NewUser): Promise<User> {
     const isDuplicated: User | null = await this.isDuplicated(data);
     if (isDuplicated) {
       throw boom.conflict('The email is already registered');
@@ -78,20 +79,35 @@ export default class UserService {
     return result;
   }
 
-  // async findByRole(value: boolean) {
-  //   const users: User[] = await AppDataSource.getRepository(User).find({
-  //     select: {
-  //       id: true,
-  //       name: true,
-  //       lastname: true,
-  //       email: true,
-  //       isAdmin: true,
-  //       verified: true,
-  //     },
-  //     where: {
-  //       isAdmin: value,
-  //     },
-  //   });
-  //   return users;
-  // }
+  async findByRole(isAdmin: boolean) {
+    const users: User[] = await AppDataSource.getRepository(User).find({
+      select: {
+        id: true,
+        name: true,
+        lastname: true,
+        email: true,
+        isAdmin: true,
+        verified: true,
+      },
+      where: {
+        isAdmin: isAdmin,
+      },
+    });
+    return users;
+  }
+
+  async updateUser(data: UpdateUser, id: string): Promise<UpdateResult> {
+    const user = await this.findById(id);
+    const result: UpdateResult = await AppDataSource.getRepository(User).update(
+      user.id,
+      data
+    );
+    return result;
+  }
+
+  async deleteUser(id: string) {
+    const user = await this.findById(id);
+    const result: User = await AppDataSource.getRepository(User).remove(user);
+    return result;
+  }
 }
