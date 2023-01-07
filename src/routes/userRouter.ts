@@ -2,9 +2,17 @@ import { Router } from 'express';
 import {
   createUser,
   getUsers,
-  getUsersById,
+  getUserById,
+  getUsersByRole,
+  updateUser,
+  deleteUser,
 } from '../controllers/UserController';
-import { createUserSchema, getUserSchema } from '../db/schemas/userSchema';
+import {
+  createUserSchema,
+  getUserByRoleSchema,
+  getUserSchema,
+  updateUserSchema,
+} from '../db/schemas/userSchema';
 import { boomError } from '../middlewares/errors';
 import { bodyValidator, paramsValidator } from '../middlewares/validator';
 
@@ -14,6 +22,21 @@ userRouter.get('/', getUsers);
 
 userRouter.post('/', bodyValidator(createUserSchema), createUser);
 
-userRouter.get('/:id', paramsValidator(getUserSchema), getUsersById);
+userRouter.get('/id/:id', paramsValidator(getUserSchema), getUserById);
+
+userRouter.patch(
+  '/id/:id',
+  paramsValidator(getUserSchema),
+  bodyValidator(updateUserSchema),
+  updateUser
+);
+
+userRouter.delete('/id/:id', paramsValidator(getUserSchema), deleteUser);
+
+userRouter.get(
+  '/role/:role',
+  paramsValidator(getUserByRoleSchema),
+  getUsersByRole
+);
 
 userRouter.use(boomError);
