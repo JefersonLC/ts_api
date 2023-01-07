@@ -1,6 +1,6 @@
 import Joi, { StringSchema, AnySchema } from 'joi';
 
-const id: StringSchema<string> = Joi.string().min(10).trim();
+const id: StringSchema<string> = Joi.string().trim();
 const name: StringSchema<string> = Joi.string().min(2).max(20).trim().messages({
   'string.base': 'Name must be text',
   'string.empty': 'Name must not be empty',
@@ -42,6 +42,12 @@ const repeat_password: AnySchema<any> = Joi.equal(Joi.ref('password')).messages(
     'any.required': 'Password is required',
   }
 );
+const role: StringSchema<string> = Joi.string()
+  .trim()
+  .equal('admin', 'common')
+  .messages({
+    'any.only': "Role must be 'admin' or 'common'",
+  });
 
 export const createUserSchema: Joi.ObjectSchema<any> = Joi.object({
   name: name.required(),
@@ -49,8 +55,21 @@ export const createUserSchema: Joi.ObjectSchema<any> = Joi.object({
   email: email.required(),
   password: password.required(),
   repeat_password: repeat_password.required(),
+}).messages({
+  'object.unknown': 'Property not allowed',
 });
 
 export const getUserSchema: Joi.ObjectSchema<any> = Joi.object({
-  id: id.required(),
+  id,
+});
+
+export const getUserByRoleSchema: Joi.ObjectSchema<any> = Joi.object({
+  role,
+});
+
+export const updateUserSchema: Joi.ObjectSchema<any> = Joi.object({
+  name,
+  lastname,
+}).messages({
+  'object.unknown': 'Property not allowed',
 });
