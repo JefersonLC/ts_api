@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import { User } from '../db/entities/User';
 import UserService from '../services/UserService';
-import { NewUser } from '../types/user';
+import { NewUser, UpdateUser } from '../types/user';
 
-const user = new UserService();
+const userService = new UserService();
 
 export async function getUsers(
   _req: Request,
@@ -11,22 +11,38 @@ export async function getUsers(
   next: NextFunction
 ): Promise<void> {
   try {
-    console.log(_req.query)
-    const users: User[] = await user.find();
+    const users: User[] = await userService.findAll();
     res.json(users);
   } catch (error) {
     next(error);
   }
 }
 
-export async function getUsersById(
+export async function getUserById(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
     const { id } = req.params;
-    const users: User[] = await user.findById(id);
+    const user: User = await userService.findById(id);
+    res.json(user);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getUsersByRole(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const { role } = req.params;
+    let isAdmin: boolean;
+    if (role === 'admin') isAdmin = true;
+    else isAdmin = false;
+    const users: User[] = await userService.findByRole(isAdmin);
     res.json(users);
   } catch (error) {
     next(error);
@@ -40,35 +56,38 @@ export async function createUser(
 ): Promise<void> {
   try {
     const data: NewUser = req.body;
-    const newUser = await user.create(data);
-    res.json(newUser);
+    const user = await userService.createUser(data);
+    res.json(user);
   } catch (error) {
     next(error);
   }
 }
 
-// export async function getAdminUsers(
-//   _req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) {
-//   try {
-//     const users: User[] = await user.findByRole(true);
-//     res.json(users);
-//   } catch (error) {
-//     next(error);
-//   }
-// }
+export async function updateUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const { id } = req.params;
+    const data: UpdateUser = req.body;
+    const user = await userService.updateUser(data, id);
+    res.json(user);
+  } catch (error) {
+    next(error);
+  }
+}
 
-// export async function getCommonUsers(
-//   _req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) {
-//   try {
-//     const users: User[] = await user.findByRole(false);
-//     res.json(users);
-//   } catch (error) {
-//     next(error);
-//   }
-// }
+export async function deleteUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id } = req.params;
+    const user = await userService.deleteUser(id);
+    res.json(user);
+  } catch (error) {
+    next(error);
+  }
+}
