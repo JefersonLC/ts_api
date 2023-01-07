@@ -6,6 +6,7 @@ export type NewUser = {
   repeat_password: string;
 };
 
-export type FindUser = {
-  id: string;
+export type UpdateUser = {
+  name: string;
+  lastname: string;
 };
