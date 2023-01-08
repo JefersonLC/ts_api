@@ -1,5 +1,13 @@
-import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryColumn,
+  ManyToOne,
+  JoinColumn,
+  OneToMany,
+} from 'typeorm';
 import { Category } from './Category';
+import { ProductOrder } from './ProductOrder';
 
 @Entity()
 export class Product {
@@ -51,4 +59,7 @@ export class Product {
   })
   @JoinColumn({ name: 'categoryId' })
   category: Category;
+
+  @OneToMany(() => ProductOrder, (productOrder) => productOrder.product)
+  detail: ProductOrder;
 }
