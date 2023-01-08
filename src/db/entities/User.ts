@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
+import { Order } from './Order';
 
 @Entity()
 export class User {
@@ -66,4 +67,7 @@ export class User {
     nullable: false,
   })
   verified: boolean;
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
 }
