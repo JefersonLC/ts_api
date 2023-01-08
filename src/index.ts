@@ -3,7 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import { AppDataSource } from './db';
 import { apiRouter } from './routes';
-import { logError } from './middlewares/errors';
+import { boomError, logError, ormError } from './middlewares/errors';
 
 const app = express();
 
@@ -27,3 +27,5 @@ app.use(express.json());
 app.use('/api/store/', apiRouter);
 
 app.use(logError);
+app.use(ormError);
+app.use(boomError);
