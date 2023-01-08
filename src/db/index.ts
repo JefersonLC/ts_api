@@ -1,5 +1,7 @@
 import { DataSource } from 'typeorm';
 import { config } from '../config';
+import { Category } from './entities/Category';
+import { Product } from './entities/Product';
 import { User } from './entities/User';
 
 export const AppDataSource = new DataSource({
@@ -9,10 +11,10 @@ export const AppDataSource = new DataSource({
   password: config.dbPassword,
   port: Number(config.dbPort),
   database: config.dbName,
-  entities: [User],
+  entities: [Category, Product, User],
   logging: true,
   synchronize: true,
   ssl: {
-    rejectUnauthorized: true
-  }
+    rejectUnauthorized: true,
+  },
 });
