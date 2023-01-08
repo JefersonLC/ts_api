@@ -1,14 +1,16 @@
 import { Boom } from '@hapi/boom';
 import { Request, Response, NextFunction } from 'express';
 import Joi from 'joi';
+import { QueryFailedError } from 'typeorm';
 
 export function logError(
   err: any,
   _req: Request,
   _res: Response,
-  _next: NextFunction
+  next: NextFunction
 ): void {
   console.log(err);
+  next(err);
 }
 
 export function boomError(
@@ -17,10 +19,27 @@ export function boomError(
   res: Response,
   next: NextFunction
 ): void {
-  res.status(err.output.statusCode).json({
-    message: err.output.payload.message,
-    error: err.output.payload.error,
-    data: err.data,
-  });
+  if (err instanceof Boom<Joi.ValidationError>) {
+    res.status(err.output.statusCode).json({
+      message: err.output.payload.message,
+      error: err.output.payload.error,
+      data: err.data,
+    });
+  }
+  next(err);
+}
+
+export function ormError(
+  err: QueryFailedError,
+  _req: Request,
+  res: Response,
+  next: NextFunction
+): void {
+  if (err instanceof QueryFailedError) {
+    res.status(400).json({
+      message: 'The category does not exist in the database',
+      error: err.name,
+    });
+  }
   next(err);
 }
