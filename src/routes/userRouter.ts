@@ -13,7 +13,6 @@ import {
   getUserSchema,
   updateUserSchema,
 } from '../db/schemas/userSchema';
-import { boomError } from '../middlewares/errors';
 import { bodyValidator, paramsValidator } from '../middlewares/validator';
 
 export const userRouter: Router = Router();
@@ -38,5 +37,3 @@ userRouter.get(
   paramsValidator(getUserByRoleSchema),
   getUsersByRole
 );
-
-userRouter.use(boomError);
