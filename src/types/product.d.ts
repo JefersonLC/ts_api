@@ -1,4 +1,4 @@
-import { Category } from "../db/entities/Category";
+import { Category } from '../db/entities/Category';
 
 export type NewProduct = {
   name: string;
@@ -8,3 +8,5 @@ export type NewProduct = {
   photo: string;
   category: Category;
 };
+
+export type UpdateProduct = NewProduct;
