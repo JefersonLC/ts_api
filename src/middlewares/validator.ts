@@ -3,7 +3,7 @@ import Joi from 'joi';
 import boom from '@hapi/boom';
 
 export function bodyValidator(
-  schema: Joi.ObjectSchema<any>
+  schema: Joi.ObjectSchema<any> | Joi.ArraySchema<any[]>
 ): (req: Request, _res: Response, next: NextFunction) => void {
   return (req: Request, _res: Response, next: NextFunction) => {
     const body = req.body;
