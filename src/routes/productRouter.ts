@@ -1,12 +1,15 @@
 import { Router } from 'express';
 import {
   createProduct,
+  deleteProduct,
   getProductById,
   getProducts,
+  updateProduct,
 } from '../controllers/ProductController';
 import {
   createProductSchema,
   getProductSchema,
+  updateProductSchema,
 } from '../db/schemas/productSchema';
 import { bodyValidator, paramsValidator } from '../middlewares/validator';
 
@@ -18,15 +21,15 @@ productRouter.post('/', bodyValidator(createProductSchema), createProduct);
 
 productRouter.get('/id/:id', paramsValidator(getProductSchema), getProductById);
 
-// categoryRouter.patch(
-//   '/id/:id',
-//   paramsValidator(getCategorySchema),
-//   bodyValidator(updateCategorySchema),
-//   updateCategory
-// );
+productRouter.patch(
+  '/id/:id',
+  paramsValidator(getProductSchema),
+  bodyValidator(updateProductSchema),
+  updateProduct
+);
 
-// categoryRouter.delete(
-//   '/id/:id',
-//   paramsValidator(getCategorySchema),
-//   deleteCategory
-// );
+productRouter.delete(
+  '/id/:id',
+  paramsValidator(getProductSchema),
+  deleteProduct
+);
