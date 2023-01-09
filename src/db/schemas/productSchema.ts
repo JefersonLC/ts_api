@@ -67,8 +67,13 @@ export const getProductSchema: Joi.ObjectSchema<any> = Joi.object({
   id,
 });
 
-// export const updateProductSchema: Joi.ObjectSchema<any> = Joi.object({
-//   name,
-// }).messages({
-//   'object.unknown': 'Property not allowed',
-// });
+export const updateProductSchema: Joi.ObjectSchema<any> = Joi.object({
+  name,
+  description,
+  price,
+  stock,
+  photo,
+  category,
+}).messages({
+  'object.unknown': 'Property not allowed',
+});
