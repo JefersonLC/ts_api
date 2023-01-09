@@ -7,7 +7,7 @@ import {
   CreateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { ProductOrder } from './ProductOrder';
+import { Detail } from './Detail';
 import { User } from './User';
 
 @Entity()
@@ -48,6 +48,6 @@ export class Order {
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  @OneToMany(() => ProductOrder, (productOrder) => productOrder.order)
-  detail: ProductOrder;
+  @OneToMany(() => Detail, (detail) => detail.order)
+  detail: Detail;
 }

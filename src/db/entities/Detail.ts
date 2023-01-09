@@ -2,8 +2,10 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { Order } from './Order';
 import { Product } from './Product';
 
-@Entity()
-export class ProductOrder {
+@Entity({
+  name: 'order_product_detail',
+})
+export class Detail {
   @PrimaryColumn({
     type: 'varchar',
     length: '10',

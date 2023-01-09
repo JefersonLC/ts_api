@@ -7,7 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Category } from './Category';
-import { ProductOrder } from './ProductOrder';
+import { Detail } from './Detail';
 
 @Entity()
 export class Product {
@@ -60,6 +60,6 @@ export class Product {
   @JoinColumn({ name: 'categoryId' })
   category: Category;
 
-  @OneToMany(() => ProductOrder, (productOrder) => productOrder.product)
-  detail: ProductOrder;
+  @OneToMany(() => Detail, (detail) => detail.product)
+  detail: Detail;
 }
