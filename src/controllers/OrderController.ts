@@ -1,0 +1,61 @@
+import { Request, Response, NextFunction } from 'express';
+import { Order } from '../db/entities/Order';
+import OrderService from '../services/OrderService';
+import { NewOrder } from '../types/order';
+
+const orderService = new OrderService();
+
+export async function getOrders(
+  _req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const orders: Order[] = await orderService.findAll();
+    res.json(orders);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getOrderById(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const { id } = req.params;
+    const order: Order = await orderService.findById(id);
+    res.json(order);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function createOrder(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const data: NewOrder = req.body;
+    const order = await orderService.createOrder(data);
+    res.json(order);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function deleteOrder(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id } = req.params;
+    const order = await orderService.deleteOrder(id);
+    res.json(order);
+  } catch (error) {
+    next(error);
+  }
+}

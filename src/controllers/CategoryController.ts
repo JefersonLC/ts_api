@@ -54,8 +54,8 @@ export async function updateCategory(
   try {
     const { id } = req.params;
     const data: UpdateCategory = req.body;
-    const user = await categoryService.updateCategory(data, id);
-    res.json(user);
+    const category = await categoryService.updateCategory(data, id);
+    res.json(category);
   } catch (error) {
     next(error);
   }
@@ -68,8 +68,8 @@ export async function deleteCategory(
 ) {
   try {
     const { id } = req.params;
-    const user = await categoryService.deleteCategory(id);
-    res.json(user);
+    const category = await categoryService.deleteCategory(id);
+    res.json(category);
   } catch (error) {
     next(error);
   }

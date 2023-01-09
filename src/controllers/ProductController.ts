@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { Product } from '../db/entities/Product';
 import ProductService from '../services/ProductService';
-import { NewProduct } from '../types/product';
+import { NewProduct, UpdateProduct } from '../types/product';
 
 const productService = new ProductService();
 
@@ -25,8 +25,8 @@ export async function getProductById(
 ): Promise<void> {
   try {
     const { id } = req.params;
-    const products: Product | null = await productService.findById(id);
-    res.json(products);
+    const product: Product = await productService.findById(id);
+    res.json(product);
   } catch (error) {
     next(error);
   }
@@ -46,31 +46,31 @@ export async function createProduct(
   }
 }
 
-// export async function updateCategory(
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ): Promise<void> {
-//   try {
-//     const { id } = req.params;
-//     const data: UpdateCategory = req.body;
-//     const user = await categoryService.updateCategory(data, id);
-//     res.json(user);
-//   } catch (error) {
-//     next(error);
-//   }
-// }
+export async function updateProduct(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const { id } = req.params;
+    const data: UpdateProduct = req.body;
+    const product = await productService.updateProduct(data, id);
+    res.json(product);
+  } catch (error) {
+    next(error);
+  }
+}
 
-// export async function deleteCategory(
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) {
-//   try {
-//     const { id } = req.params;
-//     const user = await categoryService.deleteCategory(id);
-//     res.json(user);
-//   } catch (error) {
-//     next(error);
-//   }
-// }
+export async function deleteProduct(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id } = req.params;
+    const product = await productService.deleteProduct(id);
+    res.json(product);
+  } catch (error) {
+    next(error);
+  }
+}
