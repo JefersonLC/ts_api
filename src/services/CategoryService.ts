@@ -20,10 +20,15 @@ export default class CategoryService {
   }
 
   async findById(id: string): Promise<Category> {
-    const [category]: Category[] = await AppDataSource.getRepository(
+    const category: Category | null = await AppDataSource.getRepository(
       Category
-    ).findBy({
-      id: id,
+    ).findOne({
+      where: {
+        id: id,
+      },
+      relations: {
+        products: true,
+      },
     });
     if (!category) {
       throw boom.notFound('Category not found');

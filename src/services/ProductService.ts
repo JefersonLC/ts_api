@@ -1,8 +1,9 @@
 import boom from '@hapi/boom';
 import ShortUniqueId from 'short-unique-id';
+import { UpdateResult } from 'typeorm';
 import { AppDataSource } from '../db';
 import { Product } from '../db/entities/Product';
-import { NewProduct } from '../types/product';
+import { NewProduct, UpdateProduct } from '../types/product';
 
 const uid: ShortUniqueId = new ShortUniqueId({ length: 10 });
 
@@ -18,7 +19,7 @@ export default class ProductService {
     return products;
   }
 
-  async findById(id: string): Promise<Product | null> {
+  async findById(id: string): Promise<Product> {
     const product: Product | null = await AppDataSource.getRepository(
       Product
     ).findOne({
@@ -62,19 +63,19 @@ export default class ProductService {
     return result;
   }
 
-  // async updateProduct(data: UpdateProduct, id: string): Promise<UpdateResult> {
-  //   const Product = await this.findById(id);
-  //   const result: UpdateResult = await AppDataSource.getRepository(
-  //     Product
-  //   ).update(Product.id, data);
-  //   return result;
-  // }
+  async updateProduct(data: UpdateProduct, id: string): Promise<UpdateResult> {
+    const product: Product = await this.findById(id);
+    const result: UpdateResult = await AppDataSource.getRepository(
+      Product
+    ).update(product.id, data);
+    return result;
+  }
 
-  // async deleteProduct(id: string) {
-  //   const Product = await this.findById(id);
-  //   const result: Product = await AppDataSource.getRepository(Product).remove(
-  //     Product
-  //   );
-  //   return result;
-  // }
+  async deleteProduct(id: string) {
+    const product = await this.findById(id);
+    const result: Product = await AppDataSource.getRepository(Product).remove(
+      product
+    );
+    return result;
+  }
 }
