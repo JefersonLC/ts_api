@@ -37,8 +37,9 @@ export function ormError(
 ): void {
   if (err instanceof QueryFailedError) {
     res.status(400).json({
-      message: 'The category does not exist in the database',
       error: err.name,
+      message: 'Query failed',
+      status: 400,
     });
   }
   next(err);
