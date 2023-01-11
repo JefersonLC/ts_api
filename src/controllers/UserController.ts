@@ -1,7 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
 import { User } from '../db/entities/User';
 import UserService from '../services/UserService';
 import { NewUser, UpdateUser } from '../types/user';
+import { config } from '../config';
 
 const userService = new UserService();
 
@@ -87,6 +89,25 @@ export async function deleteUser(
     const { id } = req.params;
     const user = await userService.deleteUser(id);
     res.json(user);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export function authUser(req: any, res: Response, next: NextFunction) {
+  try {
+    const user: User = req.user;
+    const sessionToken = jwt.sign(
+      {
+        user: user.id,
+        isAdmin: user.isAdmin,
+      },
+      `${config.secret}`
+    );
+    res.json({
+      user,
+      sessionToken,
+    });
   } catch (error) {
     next(error);
   }
