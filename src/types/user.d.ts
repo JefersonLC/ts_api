@@ -1,3 +1,5 @@
+import { User } from '../db/entities/User';
+
 export type NewUser = {
   name: string;
   lastname: string;
