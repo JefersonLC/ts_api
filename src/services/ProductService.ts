@@ -2,10 +2,13 @@ import boom from '@hapi/boom';
 import ShortUniqueId from 'short-unique-id';
 import { UpdateResult } from 'typeorm';
 import { AppDataSource } from '../db';
+import { Order } from '../db/entities/Order';
 import { Product } from '../db/entities/Product';
 import { NewProduct, UpdateProduct } from '../types/product';
+import OrderService from './OrderService';
 
 const uid: ShortUniqueId = new ShortUniqueId({ length: 10 });
+const orderService = new OrderService();
 
 export default class ProductService {
   async findAll(): Promise<Product[]> {
@@ -82,6 +85,21 @@ export default class ProductService {
   async findByPrice(id: string) {
     const product: Product = await this.findById(id);
     const price = product.price;
-    return price
+    return price;
+  }
+
+  async findByIdOrDeleteOrder(id: string, order: Order) {
+    const product: Product | null = await AppDataSource.getRepository(
+      Product
+    ).findOne({
+      where: {
+        id: id,
+      },
+    });
+    if (!product) {
+      await orderService.deleteOrder(order.id);
+      throw boom.notFound('Product not found');
+    }
+    return product;
   }
 }
