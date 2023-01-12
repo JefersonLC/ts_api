@@ -1,9 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import { Order } from '../db/entities/Order';
+import { User } from '../db/entities/User';
+import DetailService from '../services/DetailService';
 import OrderService from '../services/OrderService';
 import { NewOrder } from '../types/order';
 
 const orderService = new OrderService();
+const detailService = new DetailService();
 
 export async function getOrders(
   _req: Request,
@@ -33,13 +36,15 @@ export async function getOrderById(
 }
 
 export async function createOrder(
-  req: Request,
+  req: any,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
     const data: NewOrder = req.body;
-    const order = await orderService.createOrder(data);
+    const user: User = req.user.user;
+    const order: Order = await orderService.createOrder(data, user);
+    await detailService.createDetail(data, order);
     res.json(order);
   } catch (error) {
     next(error);
