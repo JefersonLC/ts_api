@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import passport from 'passport';
 import {
   createOrder,
   deleteOrder,
@@ -12,8 +13,19 @@ export const orderRouter: Router = Router();
 
 orderRouter.get('/', getOrders);
 
-orderRouter.post('/', bodyValidator(createOrderSchema), createOrder);
+orderRouter.post(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  bodyValidator(createOrderSchema),
+  createOrder
+);
 
 orderRouter.get('/id/:id', paramsValidator(getOrderSchema), getOrderById);
+
+orderRouter.get(
+  '/id/:id/details',
+  paramsValidator(getOrderSchema),
+  getOrderById
+);
 
 orderRouter.delete('/id/:id', paramsValidator(getOrderSchema), deleteOrder);

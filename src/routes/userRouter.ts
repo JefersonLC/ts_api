@@ -14,10 +14,11 @@ import {
   updateUserSchema,
 } from '../db/schemas/userSchema';
 import { bodyValidator, paramsValidator } from '../middlewares/validator';
+import passport from 'passport';
 
 export const userRouter: Router = Router();
 
-userRouter.get('/', getUsers);
+userRouter.get('/', passport.authenticate('jwt', { session: false }), getUsers);
 
 userRouter.post('/', bodyValidator(createUserSchema), createUser);
 
