@@ -23,14 +23,13 @@ const description: StringSchema<string> = Joi.string()
 
 const price: NumberSchema<number> = Joi.number().messages({
   'number.base': 'Price must be number',
-  'number.empty': 'Price must not be empty',
   'any.required': 'Price is required',
 });
 
-const stock: NumberSchema<number> = Joi.number().messages({
+const stock: NumberSchema<number> = Joi.number().integer().messages({
   'number.base': 'Stock must be number',
-  'number.empty': 'Stock must not be empty',
   'any.required': 'Stock is required',
+  'number.integer': 'Stock must be an integer'
 });
 
 const photo: StringSchema<string> = Joi.string().max(150).trim().messages({

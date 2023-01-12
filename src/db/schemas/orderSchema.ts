@@ -1,4 +1,4 @@
-import Joi, { StringSchema } from 'joi';
+import Joi, { NumberSchema, StringSchema } from 'joi';
 
 const id: StringSchema<string> = Joi.string().trim();
 const address: StringSchema<string> = Joi.string()
@@ -9,20 +9,36 @@ const address: StringSchema<string> = Joi.string()
     'string.base': 'Address must be text',
     'string.empty': 'Address must not be empty',
     'string.min': 'Address must have at least 2 characters',
-    'string.max': 'Very long Address',
+    'string.max': 'Very long address',
     'any.required': 'Address is required',
   });
 
-const user: StringSchema<string> = Joi.string().max(10).trim().messages({
-  'string.base': 'User id must be text',
-  'string.empty': 'User id must not be empty',
-  'string.max': 'Very long user id',
-  'any.required': 'User id is required',
+const amount: NumberSchema<number> = Joi.number().integer().messages({
+  'any.required': 'Amount is required',
+  'number.base': 'Amount must be number',
+  'number.integer': 'Amount must be an integer',
+});
+const product: StringSchema<string> = Joi.string().trim().messages({
+  'string.base': 'Product must be text',
+  'any.required': 'Product is required',
+  'string.empty': 'Product must not be empty',
 });
 
 export const createOrderSchema: Joi.ObjectSchema<any> = Joi.object({
   address: address.required(),
-  user: user.required(),
+  details: Joi.array()
+    .items({
+      amount: amount.required(),
+      product: product.required(),
+    })
+    .required()
+    .min(1)
+    .messages({
+      'array.base': 'Must be a list',
+      'object.unknown': 'Property not allowed',
+      'object.base': 'The list must contaain a product',
+      'any.required': 'Details is required',
+    }),
 }).messages({
   'object.unknown': 'Property not allowed',
 });
