@@ -5,8 +5,6 @@ export type NewOrder = {
   details: [
     {
       amount: number;
-      unitPrice: number;
-      totalPrice: number;
       product: Product;
     }
   ];
