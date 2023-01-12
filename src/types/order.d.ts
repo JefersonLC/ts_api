@@ -2,5 +2,12 @@ import { User } from '../db/entities/User';
 
 export type NewOrder = {
   address: string;
-  user: User;
+  details: [
+    {
+      amount: number;
+      unitPrice: number;
+      totalPrice: number;
+      product: Product;
+    }
+  ];
 };
