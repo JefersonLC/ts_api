@@ -45,7 +45,7 @@ export default class UserService {
     return user;
   }
 
-  async isDuplicated({ email }: NewUser): Promise<User | null> {
+  async findByEmail(email: string): Promise<User | null> {
     const user: User | null = await AppDataSource.getRepository(User).findOneBy(
       {
         email: email,
@@ -55,7 +55,7 @@ export default class UserService {
   }
 
   async createUser(data: NewUser): Promise<User> {
-    const isDuplicated: User | null = await this.isDuplicated(data);
+    const isDuplicated: User | null = await this.findByEmail(data.email);
     if (isDuplicated) {
       throw boom.conflict('The email is already registered');
     }
@@ -75,7 +75,7 @@ export default class UserService {
       password: hash,
       token: token,
     });
-    const result = await AppDataSource.getRepository(User).save(user);
+    const result: User = await AppDataSource.getRepository(User).save(user);
     return result;
   }
 

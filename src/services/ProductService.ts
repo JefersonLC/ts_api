@@ -78,4 +78,10 @@ export default class ProductService {
     );
     return result;
   }
+
+  async findByPrice(id: string) {
+    const product: Product = await this.findById(id);
+    const price = product.price;
+    return price
+  }
 }

@@ -2,6 +2,7 @@ import boom from '@hapi/boom';
 import ShortUniqueId from 'short-unique-id';
 import { AppDataSource } from '../db';
 import { Order } from '../db/entities/Order';
+import { User } from '../db/entities/User';
 import { NewOrder } from '../types/order';
 
 const uid: ShortUniqueId = new ShortUniqueId({ length: 10 });
@@ -16,9 +17,22 @@ export default class OrderService {
           lastname: true,
           email: true,
         },
+        detail: {
+          id: true,
+          amount: true,
+          unitPrice: true,
+          totalPrice: true,
+          product: {
+            id: true,
+            name: true,
+          },
+        },
       },
       relations: {
         user: true,
+        detail: {
+          product: true,
+        },
       },
     });
     return orders;
@@ -31,8 +45,17 @@ export default class OrderService {
       where: {
         id: id,
       },
+      select: {
+        user: {
+          id: true,
+          name: true,
+          lastname: true,
+          email: true,
+        },
+      },
       relations: {
         user: true,
+        detail: true,
       },
     });
     if (!order) {
@@ -41,13 +64,13 @@ export default class OrderService {
     return order;
   }
 
-  async createOrder(data: NewOrder): Promise<Order> {
+  async createOrder(data: NewOrder, user: User): Promise<Order> {
     const order = AppDataSource.getRepository(Order).create({
       id: uid(),
       address: data.address,
-      user: data.user,
+      user: user,
     });
-    const result = await AppDataSource.getRepository(Order).save(order);
+    const result: Order = await AppDataSource.getRepository(Order).save(order);
     return result;
   }
 
