@@ -24,6 +24,8 @@ app.listen(PORT, () => {
 app.use(cors());
 app.use(express.json());
 
+import './middlewares/passport';
+
 app.use('/api/store/', apiRouter);
 
 app.use(logError);
