@@ -27,14 +27,17 @@ export default class DetailService {
 
   async createDetail(data: NewOrder, order: Order) {
     const response = data.details.map(async (detail) => {
-      const product = await productService.findById(detail.product);
+      const product = await productService.findByIdOrDeleteOrder(
+        detail.product,
+        order
+      );
       return {
         id: uid(),
         amount: detail.amount,
         unitPrice: product.price,
         totalPrice: product.price * detail.amount,
-        order: order,
         product: detail.product,
+        order: order,
       };
     });
 
