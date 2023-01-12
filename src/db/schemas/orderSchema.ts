@@ -27,18 +27,21 @@ const product: StringSchema<string> = Joi.string().trim().messages({
 export const createOrderSchema: Joi.ObjectSchema<any> = Joi.object({
   address: address.required(),
   details: Joi.array()
-    .items({
-      amount: amount.required(),
-      product: product.required(),
-    })
-    .required()
     .min(1)
+    .items(
+      Joi.object().keys({
+        amount: amount.required(),
+        product: product.required(),
+      })
+    )
     .messages({
       'array.base': 'Must be a list',
+      'array.min': 'List must contain at least one product',
       'object.unknown': 'Property not allowed',
-      'object.base': 'The list must contaain a product',
+      'object.base': 'List must contain a product',
       'any.required': 'Details is required',
-    }),
+    })
+    .required(),
 }).messages({
   'object.unknown': 'Property not allowed',
 });
