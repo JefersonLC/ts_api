@@ -19,7 +19,7 @@ export function boomError(
   res: Response,
   next: NextFunction
 ): void {
-  if (err instanceof Boom<Joi.ValidationError>) {
+  if (err.isBoom) {
     res.status(err.output.statusCode).json({
       message: err.output.payload.message,
       error: err.output.payload.error,
