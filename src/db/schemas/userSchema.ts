@@ -73,3 +73,10 @@ export const updateUserSchema: Joi.ObjectSchema<any> = Joi.object({
 }).messages({
   'object.unknown': 'Property not allowed',
 });
+
+export const logInUserSchema: Joi.ObjectSchema<any> = Joi.object({
+  email: email.required(),
+  password: password.required(),
+}).messages({
+  'object.unknown': 'Property not allowed',
+});
