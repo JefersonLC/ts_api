@@ -25,6 +25,7 @@ export default class OrderService {
           product: {
             id: true,
             name: true,
+
           },
         },
       },
@@ -52,10 +53,22 @@ export default class OrderService {
           lastname: true,
           email: true,
         },
+        detail: {
+          id: true,
+          amount: true,
+          unitPrice: true,
+          totalPrice: true,
+          product: {
+            id: true,
+            name: true,
+          },
+        },
       },
       relations: {
         user: true,
-        detail: true,
+        detail: {
+          product: true,
+        },
       },
     });
     if (!order) {
