@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import express from 'express';
 import cors from 'cors';
+import cookieSession from 'cookie-session';
 import { AppDataSource } from './db';
 import { apiRouter } from './routes';
 import { boomError, logError, ormError } from './middlewares/errors';
@@ -23,6 +24,13 @@ app.listen(PORT, () => {
 
 app.use(cors());
 app.use(express.json());
+app.use(
+  cookieSession({
+    name: 'holaowo',
+    keys: ['xdasd', '1231'],
+    httpOnly: true,
+  })
+);
 
 import './middlewares/passport';
 
