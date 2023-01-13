@@ -102,7 +102,10 @@ export function authUser(req: any, res: Response, next: NextFunction) {
         user: user.id,
         isAdmin: user.isAdmin,
       },
-      `${config.secret}`
+      `${config.secret}`,
+      {
+        expiresIn: "7d",
+      }
     );
     res.json({
       user,
