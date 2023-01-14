@@ -21,6 +21,10 @@ export const getCategorySchema: Joi.ObjectSchema<any> = Joi.object({
 
 export const updateCategorySchema: Joi.ObjectSchema<any> = Joi.object({
   name,
-}).messages({
-  'object.unknown': 'Property not allowed',
-});
+})
+  .min(1)
+  .messages({
+    'object.unknown': 'Property not allowed',
+    'object.min': 'There must be at least one value to change',
+    'object.base': 'must be of category object',
+  });
