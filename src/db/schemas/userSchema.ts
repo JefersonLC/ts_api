@@ -70,9 +70,12 @@ export const getUserByRoleSchema: Joi.ObjectSchema<any> = Joi.object({
 export const updateUserSchema: Joi.ObjectSchema<any> = Joi.object({
   name,
   lastname,
-}).messages({
-  'object.unknown': 'Property not allowed',
-});
+})
+  .min(1)
+  .messages({
+    'object.unknown': 'Property not allowed',
+    'object.min': 'There must be at least one value to change',
+  });
 
 export const logInUserSchema: Joi.ObjectSchema<any> = Joi.object({
   email: email.required(),
