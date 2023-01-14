@@ -11,29 +11,17 @@ import { bodyValidator, paramsValidator } from '../middlewares/validator';
 
 export const orderRouter: Router = Router();
 
-orderRouter.get(
-  '/',
-  passport.authenticate('jwt', { session: false }),
-  getOrders
-);
+orderRouter
+  .route('/')
+  .all(passport.authenticate('jwt', { session: false }))
+  .get(getOrders)
+  .post(bodyValidator(createOrderSchema), createOrder);
 
-orderRouter.post(
-  '/',
-  passport.authenticate('jwt', { session: false }),
-  bodyValidator(createOrderSchema),
-  createOrder
-);
-
-orderRouter.get(
-  '/id/:id',
-  passport.authenticate('jwt', { session: false }),
-  paramsValidator(getOrderSchema),
-  getOrderById
-);
-
-orderRouter.delete(
-  '/id/:id',
-  passport.authenticate('jwt', { session: false }),
-  paramsValidator(getOrderSchema),
-  deleteOrder
-);
+orderRouter
+  .route('/id/:id')
+  .all(
+    passport.authenticate('jwt', { session: false }),
+    paramsValidator(getOrderSchema)
+  )
+  .get(getOrderById)
+  .delete(deleteOrder);
