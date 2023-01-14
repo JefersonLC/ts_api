@@ -17,36 +17,23 @@ import { bodyValidator, paramsValidator } from '../middlewares/validator';
 
 export const categoryRouter: Router = Router();
 
-categoryRouter.get('/', getCategories);
+categoryRouter
+  .route('/')
+  .get(getCategories)
+  .post(
+    passport.authenticate('jwt', { session: false }),
+    checkRole,
+    bodyValidator(createCategorySchema),
+    createCategory
+  );
 
-categoryRouter.post(
-  '/',
-  passport.authenticate('jwt', { session: false }),
-  checkRole,
-  bodyValidator(createCategorySchema),
-  createCategory
-);
-
-categoryRouter.get(
-  '/id/:id',
-  passport.authenticate('jwt', { session: false }),
-  paramsValidator(getCategorySchema),
-  getCategoryById
-);
-
-categoryRouter.patch(
-  '/id/:id',
-  passport.authenticate('jwt', { session: false }),
-  checkRole,
-  paramsValidator(getCategorySchema),
-  bodyValidator(updateCategorySchema),
-  updateCategory
-);
-
-categoryRouter.delete(
-  '/id/:id',
-  passport.authenticate('jwt', { session: false }),
-  checkRole,
-  paramsValidator(getCategorySchema),
-  deleteCategory
-);
+categoryRouter
+  .route('/id/:id')
+  .get(paramsValidator(getCategorySchema), getCategoryById)
+  .all(
+    passport.authenticate('jwt', { session: false }),
+    checkRole,
+    paramsValidator(getCategorySchema)
+  )
+  .patch(bodyValidator(updateCategorySchema), updateCategory)
+  .delete(deleteCategory);
