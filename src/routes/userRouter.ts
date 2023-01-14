@@ -19,31 +19,20 @@ import { checkRole } from '../middlewares/auth';
 
 export const userRouter: Router = Router();
 
-userRouter.get('/', passport.authenticate('jwt', { session: false }), getUsers);
+userRouter
+  .route('/')
+  .get(passport.authenticate('jwt', { session: false }), getUsers)
+  .post(bodyValidator(createUserSchema), createUser);
 
-userRouter.post('/', bodyValidator(createUserSchema), createUser);
-
-userRouter.get(
-  '/id/:id',
-  passport.authenticate('jwt', { session: false }),
-  paramsValidator(getUserSchema),
-  getUserById
-);
-
-userRouter.patch(
-  '/id/:id',
-  passport.authenticate('jwt', { session: false }),
-  paramsValidator(getUserSchema),
-  bodyValidator(updateUserSchema),
-  updateUser
-);
-
-userRouter.delete(
-  '/id/:id',
-  passport.authenticate('jwt', { session: false }),
-  paramsValidator(getUserSchema),
-  deleteUser
-);
+userRouter
+  .route('/id/:id')
+  .all(
+    passport.authenticate('jwt', { session: false }),
+    paramsValidator(getUserSchema)
+  )
+  .get(getUserById)
+  .patch(bodyValidator(updateUserSchema), updateUser)
+  .delete(deleteUser);
 
 userRouter.get(
   '/role/:role',
