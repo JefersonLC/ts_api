@@ -44,3 +44,19 @@ export function ormError(
   }
   next(err);
 }
+
+export function syntaxError(
+  err: SyntaxError,
+  _req: Request,
+  res: Response,
+  next: NextFunction
+): void {
+  if (err instanceof SyntaxError) {
+    res.status(400).json({
+      error: err.name,
+      message: 'Unexpected format',
+      status: 400,
+    });
+  }
+  next(err);
+}
