@@ -1,15 +1,14 @@
 {
   "name": "api-tsc",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
     "build": "rimraf build && tsc",
     "start": "npm run build && node dist/index.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["typescript", "javascript","api"],
+  "author": "Jeferson Limay",
   "license": "ISC",
   "devDependencies": {
     "@types/bcrypt": "5.0.0",
