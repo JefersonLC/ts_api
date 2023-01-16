@@ -1,7 +1,9 @@
 import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
 import { Product } from './Product';
 
-@Entity()
+@Entity({
+  name: 'categories',
+})
 export class Category {
   @PrimaryColumn({
     type: 'varchar',

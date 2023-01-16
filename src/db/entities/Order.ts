@@ -10,7 +10,9 @@ import {
 import { Detail } from './Detail';
 import { User } from './User';
 
-@Entity()
+@Entity({
+  name: 'orders',
+})
 export class Order {
   @PrimaryColumn({
     type: 'varchar',

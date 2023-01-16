@@ -1,7 +1,9 @@
 import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
 import { Order } from './Order';
 
-@Entity()
+@Entity({
+  name: 'users',
+})
 export class User {
   @PrimaryColumn({
     type: 'varchar',
