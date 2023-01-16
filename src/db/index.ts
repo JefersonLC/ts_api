@@ -9,7 +9,6 @@ export const AppDataSource = new DataSource({
   port: Number(config.dbPort),
   database: config.dbName,
   entities: ['src/db/entities/*'],
-  migrationsRun: true,
   migrations: ['src/db/migrations/*'],
   ssl: {
     rejectUnauthorized: true,
