@@ -60,6 +60,7 @@ export const createProductSchema: Joi.ObjectSchema<any> = Joi.object({
   category: category.required(),
 }).messages({
   'object.unknown': 'Property not allowed',
+  'object.base': 'Must be of product object'
 });
 
 export const getProductSchema: Joi.ObjectSchema<any> = Joi.object({
@@ -78,5 +79,5 @@ export const updateProductSchema: Joi.ObjectSchema<any> = Joi.object({
   .messages({
     'object.unknown': 'Property not allowed',
     'object.min': 'There must be at least one value to change',
-    'object.base': 'must be of product object',
+    'object.base': 'Must be of product object',
   });

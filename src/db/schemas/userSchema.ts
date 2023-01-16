@@ -57,6 +57,7 @@ export const createUserSchema: Joi.ObjectSchema<any> = Joi.object({
   repeat_password: repeat_password.required(),
 }).messages({
   'object.unknown': 'Property not allowed',
+  'object.base': 'Must be of user object'
 });
 
 export const getUserSchema: Joi.ObjectSchema<any> = Joi.object({
@@ -82,4 +83,5 @@ export const logInUserSchema: Joi.ObjectSchema<any> = Joi.object({
   password: password.required(),
 }).messages({
   'object.unknown': 'Property not allowed',
+  'object.base': 'Must be of user object'
 });
