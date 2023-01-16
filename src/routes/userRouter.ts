@@ -21,16 +21,14 @@ export const userRouter: Router = Router();
 
 userRouter
   .route('/')
-  .get(passport.authenticate('jwt', { session: false }), getUsers)
+  .get(passport.authenticate('jwt', { session: false }), checkRole, getUsers)
   .post(bodyValidator(createUserSchema), createUser);
 
 userRouter
   .route('/id/:id')
-  .all(
-    passport.authenticate('jwt', { session: false }),
-    paramsValidator(getUserSchema)
-  )
-  .get(getUserById)
+  .all(passport.authenticate('jwt', { session: false }))
+  .get(checkRole, getUserById)
+  .all(paramsValidator(getUserSchema))
   .patch(bodyValidator(updateUserSchema), updateUser)
   .delete(deleteUser);
 
