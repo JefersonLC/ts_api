@@ -8,8 +8,8 @@ export const AppDataSource = new DataSource({
   password: config.dbPassword,
   port: Number(config.dbPort),
   database: config.dbName,
-  entities: ['src/db/entities/*'],
-  migrations: ['src/db/migrations/*'],
+  entities: [`${__dirname}/entities/*.{js,ts}`],
+  migrations: [`${__dirname}/migrations/*.{js,ts}`],
   ssl: {
     rejectUnauthorized: true,
   },
