@@ -9,9 +9,7 @@ import {
 import { Category } from './Category';
 import { Detail } from './Detail';
 
-@Entity({
-  name: 'products',
-})
+@Entity()
 export class Product {
   @PrimaryColumn({
     type: 'varchar',
