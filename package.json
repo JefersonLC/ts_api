@@ -7,7 +7,11 @@
     "build": "rimraf build && tsc",
     "start": "node build/index.js"
   },
-  "keywords": ["typescript", "javascript","api"],
+  "keywords": [
+    "typescript",
+    "javascript",
+    "api"
+  ],
   "author": "Jeferson Limay",
   "license": "ISC",
   "devDependencies": {
@@ -20,7 +24,6 @@
     "@types/node": "18.11.18",
     "@types/passport-jwt": "3.0.8",
     "@types/passport-local": "1.0.35",
-    "@types/sequelize": "4.28.14",
     "nodemon": "2.0.20",
     "reflect-metadata": "0.1.13",
     "rimraf": "4.0.5",
