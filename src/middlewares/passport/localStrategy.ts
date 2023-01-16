@@ -14,7 +14,7 @@ export const localStrategy = new Strategy(
   async (email: string, password: string, done): Promise<void> => {
     try {
       const user: User | null = await userService.findByEmail(email);
-      if (!user) return done(boom.notFound('User not found'), false);
+      if (!user) return done(boom.notFound('Email is not registered'), false);
       if (!bcrypt.compareSync(password, user.password))
         return done(boom.badData('Incorrect password'), false);
       if (!user.verified)
