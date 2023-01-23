@@ -7,7 +7,8 @@ import {
   getOrders,
 } from '../controllers/OrderController';
 import { createOrderSchema, getOrderSchema } from '../db/schemas/orderSchema';
-import { bodyValidator, paramsValidator } from '../middlewares/validator';
+import { requestValidator } from '../middlewares/validator';
+import { request } from '../types/requestEnum';
 
 export const orderRouter: Router = Router();
 
@@ -15,13 +16,13 @@ orderRouter
   .route('/')
   .all(passport.authenticate('jwt', { session: false }))
   .get(getOrders)
-  .post(bodyValidator(createOrderSchema), createOrder);
+  .post(requestValidator(request.body, createOrderSchema), createOrder);
 
 orderRouter
   .route('/id/:id')
   .all(
     passport.authenticate('jwt', { session: false }),
-    paramsValidator(getOrderSchema)
+    requestValidator(request.params, getOrderSchema)
   )
   .get(getOrderById)
   .delete(deleteOrder);
