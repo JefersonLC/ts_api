@@ -104,13 +104,28 @@ export function authUser(req: any, res: Response, next: NextFunction) {
       },
       `${config.secret}`,
       {
-        expiresIn: "7d",
+        expiresIn: '7d',
       }
     );
     res.json({
       user,
       sessionToken,
     });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export function verifyUserEmail(
+  req: Request,
+  _res: Response,
+  next: NextFunction
+) {
+  try {
+    const { token } = req.query;
+    if (!token) {
+      console.log('se esperaba un token');
+    }
   } catch (error) {
     next(error);
   }
