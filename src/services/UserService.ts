@@ -54,6 +54,18 @@ export default class UserService {
     return user;
   }
 
+  async findByToken(token: string): Promise<User> {
+    const user: User | null = await AppDataSource.getRepository(User).findOneBy(
+      {
+        token: token,
+      }
+    );
+    if (!user) {
+      throw boom.notFound('User not found');
+    }
+    return user;
+  }
+
   async createUser(data: NewUser): Promise<User> {
     const isDuplicated: User | null = await this.findByEmail(data.email);
     if (isDuplicated) {
@@ -79,7 +91,7 @@ export default class UserService {
     return result;
   }
 
-  async findByRole(isAdmin: boolean) {
+  async findByRole(isAdmin: boolean): Promise<User[]> {
     const users: User[] = await AppDataSource.getRepository(User).find({
       select: {
         id: true,
