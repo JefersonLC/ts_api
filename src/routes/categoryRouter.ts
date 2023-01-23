@@ -13,7 +13,8 @@ import {
   updateCategorySchema,
 } from '../db/schemas/categorySchema';
 import { checkRole } from '../middlewares/auth';
-import { bodyValidator, paramsValidator } from '../middlewares/validator';
+import { requestValidator } from '../middlewares/validator';
+import { request } from '../types/requestEnum';
 
 export const categoryRouter: Router = Router();
 
@@ -23,17 +24,17 @@ categoryRouter
   .post(
     passport.authenticate('jwt', { session: false }),
     checkRole,
-    bodyValidator(createCategorySchema),
+    requestValidator(request.body, createCategorySchema),
     createCategory
   );
 
 categoryRouter
   .route('/id/:id')
-  .get(paramsValidator(getCategorySchema), getCategoryById)
+  .get(requestValidator(request.params, getCategorySchema), getCategoryById)
   .all(
     passport.authenticate('jwt', { session: false }),
     checkRole,
-    paramsValidator(getCategorySchema)
+    requestValidator(request.params, getCategorySchema)
   )
-  .patch(bodyValidator(updateCategorySchema), updateCategory)
+  .patch(requestValidator(request.body, updateCategorySchema), updateCategory)
   .delete(deleteCategory);
