@@ -13,7 +13,8 @@ import {
   updateProductSchema,
 } from '../db/schemas/productSchema';
 import { checkRole } from '../middlewares/auth';
-import { bodyValidator, paramsValidator } from '../middlewares/validator';
+import { requestValidator } from '../middlewares/validator';
+import { request } from '../types/requestEnum';
 
 export const productRouter: Router = Router();
 
@@ -23,17 +24,17 @@ productRouter
   .post(
     passport.authenticate('jwt', { session: false }),
     checkRole,
-    bodyValidator(createProductSchema),
+    requestValidator(request.body, createProductSchema),
     createProduct
   );
 
 productRouter
   .route('/id/:id')
-  .get(paramsValidator(getProductSchema), getProductById)
+  .get(requestValidator(request.params, getProductSchema), getProductById)
   .all(
     passport.authenticate('jwt', { session: false }),
     checkRole,
-    paramsValidator(getProductSchema)
+    requestValidator(request.params, getProductSchema)
   )
-  .patch(bodyValidator(updateProductSchema), updateProduct)
+  .patch(requestValidator(request.body, updateProductSchema), updateProduct)
   .delete(deleteProduct);
