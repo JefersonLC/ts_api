@@ -119,5 +119,6 @@ dist
 
 
 public/images/*
+!public/images/.gitkeep
 
 # End of https://mrkandreev.name/snippets/gitignore-generator/#Node
