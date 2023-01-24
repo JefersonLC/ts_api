@@ -2,6 +2,7 @@ import boom from '@hapi/boom';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import ShortUniqueId from 'short-unique-id';
+import nodemailer from 'nodemailer';
 import { UpdateResult } from 'typeorm';
 import { config } from '../config';
 import { AppDataSource } from '../db';
@@ -51,18 +52,6 @@ export default class UserService {
         email: email,
       }
     );
-    return user;
-  }
-
-  async findByToken(token: string): Promise<User> {
-    const user: User | null = await AppDataSource.getRepository(User).findOneBy(
-      {
-        token: token,
-      }
-    );
-    if (!user) {
-      throw boom.notFound('User not found');
-    }
     return user;
   }
 
@@ -121,5 +110,55 @@ export default class UserService {
     const user = await this.findById(id);
     const result: User = await AppDataSource.getRepository(User).remove(user);
     return result;
+  }
+
+  async findByToken(token: any): Promise<void> {
+    const user: User | null = await AppDataSource.getRepository(User).findOneBy(
+      {
+        token: token,
+      }
+    );
+    if (!user) {
+      throw boom.notFound('User not found');
+    }
+  }
+
+  async updateVerifyStatus(token: any): Promise<UpdateResult> {
+    const result = await AppDataSource.manager.update(
+      User,
+      {
+        token: token,
+      },
+      {
+        verified: true,
+      }
+    );
+    return result;
+  }
+
+  async sendEmailToVerify(token: string, userEmail: string): Promise<void> {
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false,
+      auth: {
+        user: config.email,
+        pass: config.emailPass,
+      },
+    });
+
+    const mailOptions = {
+      from: config.email,
+      to: userEmail,
+      subject: 'Email verification',
+      html: `
+        <div>
+          <p>
+            Verify your email: ${config.domain}/api/store/verify?token=${token}
+          </p>
+        </div>
+      `,
+    };
+    await transporter.sendMail(mailOptions);
   }
 }
