@@ -23,6 +23,7 @@
     "@types/jsonwebtoken": "9.0.0",
     "@types/multer": "1.4.7",
     "@types/node": "18.11.18",
+    "@types/nodemailer": "6.4.7",
     "@types/passport-jwt": "3.0.8",
     "@types/passport-local": "1.0.35",
     "nodemon": "2.0.20",
