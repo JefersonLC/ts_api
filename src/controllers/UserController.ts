@@ -4,6 +4,7 @@ import { User } from '../db/entities/User';
 import UserService from '../services/UserService';
 import { NewUser, UpdateUser } from '../types/user';
 import { config } from '../config';
+import boom from '@hapi/boom';
 
 const userService = new UserService();
 
@@ -59,7 +60,12 @@ export async function createUser(
   try {
     const data: NewUser = req.body;
     const user = await userService.createUser(data);
-    res.json(user);
+    await userService.sendEmailToVerify(user.token, user.email);
+    res.json({
+      info: 'Success',
+      status: 201,
+      message: 'You have successfully registered',
+    });
   } catch (error) {
     next(error);
   }
@@ -84,7 +90,7 @@ export async function deleteUser(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): Promise<void> {
   try {
     const { id } = req.params;
     const user = await userService.deleteUser(id);
@@ -94,7 +100,7 @@ export async function deleteUser(
   }
 }
 
-export function authUser(req: any, res: Response, next: NextFunction) {
+export function authUser(req: any, res: Response, next: NextFunction): void {
   try {
     const user: User = req.user;
     const sessionToken = jwt.sign(
@@ -116,16 +122,23 @@ export function authUser(req: any, res: Response, next: NextFunction) {
   }
 }
 
-export function verifyUserEmail(
+export async function verifyUserEmail(
   req: Request,
-  _res: Response,
+  res: Response,
   next: NextFunction
-) {
+): Promise<void> {
   try {
     const { token } = req.query;
     if (!token) {
-      console.log('se esperaba un token');
+      throw boom.badRequest('A token was expected');
     }
+    await userService.findByToken(token);
+    await userService.updateVerifyStatus(token);
+    res.status(200).json({
+      info: 'Success',
+      status: 200,
+      message: 'Your email has been successfully verified',
+    });
   } catch (error) {
     next(error);
   }
