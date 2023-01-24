@@ -4,7 +4,7 @@ import { userRouter } from './userRouter';
 import { categoryRouter } from './categoryRouter';
 import { productRouter } from './productRouter';
 import { orderRouter } from './orderRouter';
-import { authUser } from '../controllers/UserController';
+import { authUser, verifyUserEmail } from '../controllers/UserController';
 import { requestValidator } from '../middlewares/validator';
 import { logInUserSchema } from '../db/schemas/userSchema';
 import { request } from '../types/requestEnum';
@@ -21,7 +21,7 @@ apiRouter.post(
   passport.authenticate('local', { session: false }),
   authUser
 );
-apiRouter.get('/verify', authUser);
+apiRouter.get('/verify', verifyUserEmail);
 apiRouter.use('/users', userRouter);
 apiRouter.use('/categories', categoryRouter);
 apiRouter.use('/products', productRouter);
