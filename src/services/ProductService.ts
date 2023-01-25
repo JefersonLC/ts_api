@@ -1,3 +1,4 @@
+import fs from 'fs';
 import boom from '@hapi/boom';
 import ShortUniqueId from 'short-unique-id';
 import { UpdateResult } from 'typeorm';
@@ -55,6 +56,7 @@ export default class ProductService {
   ): Promise<Product> {
     const isDuplicated: Product | null = await this.isDuplicated(data);
     if (isDuplicated) {
+      fs.unlinkSync(image.path);
       throw boom.conflict('The product is already registered');
     }
     const product = AppDataSource.getRepository(Product).create({
