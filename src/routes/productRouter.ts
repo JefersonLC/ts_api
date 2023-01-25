@@ -13,6 +13,7 @@ import {
   updateProductSchema,
 } from '../db/schemas/productSchema';
 import { checkRole } from '../middlewares/auth';
+import { upload } from '../middlewares/multer';
 import { requestValidator } from '../middlewares/validator';
 import { request } from '../types/requestEnum';
 
@@ -24,6 +25,7 @@ productRouter
   .post(
     passport.authenticate('jwt', { session: false }),
     checkRole,
+    upload.single('image'),
     requestValidator(request.body, createProductSchema),
     createProduct
   );
