@@ -40,7 +40,7 @@ export async function createProduct(
 ): Promise<void> {
   try {
     const data: NewProduct = req.body;
-    const image: Express.Multer.File | undefined = req.file;
+    const image = req.file;
     if (!image) {
       throw boom.badRequest('An image was expected');
     }

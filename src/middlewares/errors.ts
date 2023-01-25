@@ -21,7 +21,7 @@ export function boomError(
   res: Response,
   next: NextFunction
 ): void {
-  const file: Express.Multer.File | undefined = req.file;
+  const file = req.file;
   if (file && fs.existsSync(file.path)) {
     fs.unlinkSync(file.path);
   }
