@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import boom from '@hapi/boom';
 import { Product } from '../db/entities/Product';
 import ProductService from '../services/ProductService';
 import { NewProduct, UpdateProduct } from '../types/product';
@@ -39,7 +40,11 @@ export async function createProduct(
 ): Promise<void> {
   try {
     const data: NewProduct = req.body;
-    const product = await productService.createProduct(data);
+    const image: Express.Multer.File | undefined = req.file;
+    if (!image) {
+      throw boom.badRequest('An image was expected');
+    }
+    const product = await productService.createProduct(data, image);
     res.json(product);
   } catch (error) {
     next(error);
