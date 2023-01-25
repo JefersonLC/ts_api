@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import Joi from 'joi';
 import { MulterError } from 'multer';
 import { QueryFailedError } from 'typeorm';
+import fs from 'fs';
 
 export function logError(
   err: any,
@@ -16,10 +17,14 @@ export function logError(
 
 export function boomError(
   err: Boom<Joi.ValidationError>,
-  _req: Request,
+  req: Request,
   res: Response,
   next: NextFunction
 ): void {
+  const file: Express.Multer.File | undefined = req.file;
+  if (file && fs.existsSync(file.path)) {
+    fs.unlinkSync(file.path);
+  }
   if (err.isBoom) {
     res.status(err.output.statusCode).json({
       message: err.output.payload.message,
