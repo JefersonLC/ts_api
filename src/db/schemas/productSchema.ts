@@ -32,12 +32,12 @@ const stock: NumberSchema<number> = Joi.number().integer().messages({
   'number.integer': 'Stock must be an integer',
 });
 
-const photo: StringSchema<string> = Joi.string().max(150).trim().messages({
-  'string.base': 'Photo must be text',
-  'string.empty': 'Photo must not be empty',
-  'string.max': 'Very long photo',
-  'any.required': 'Photo is required',
-});
+// const photo: StringSchema<string> = Joi.string().max(150).trim().messages({
+//   'string.base': 'Photo must be text',
+//   'string.empty': 'Photo must not be empty',
+//   'string.max': 'Very long photo',
+//   'any.required': 'Photo is required',
+// });
 
 const category: StringSchema<string> = Joi.string()
   .min(10)
@@ -56,7 +56,6 @@ export const createProductSchema: Joi.ObjectSchema<any> = Joi.object({
   description: description.required(),
   price: price.required(),
   stock: stock.required(),
-  photo: photo.required(),
   category: category.required(),
 }).messages({
   'object.unknown': 'Property not allowed',
@@ -72,7 +71,6 @@ export const updateProductSchema: Joi.ObjectSchema<any> = Joi.object({
   description,
   price,
   stock,
-  photo,
   category,
 })
   .min(1)
