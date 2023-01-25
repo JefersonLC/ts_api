@@ -1,6 +1,7 @@
 import boom from '@hapi/boom';
 import ShortUniqueId from 'short-unique-id';
 import { UpdateResult } from 'typeorm';
+import { config } from '../config';
 import { AppDataSource } from '../db';
 import { Order } from '../db/entities/Order';
 import { Product } from '../db/entities/Product';
@@ -48,7 +49,10 @@ export default class ProductService {
     return product;
   }
 
-  async createProduct(data: NewProduct): Promise<Product> {
+  async createProduct(
+    data: NewProduct,
+    image: Express.Multer.File
+  ): Promise<Product> {
     const isDuplicated: Product | null = await this.isDuplicated(data);
     if (isDuplicated) {
       throw boom.conflict('The product is already registered');
@@ -59,7 +63,7 @@ export default class ProductService {
       description: data.description,
       price: data.price,
       stock: data.stock,
-      photo: data.photo,
+      photo: `${config.domain}/public/images/products/${image.filename}`,
       category: data.category,
     });
     const result = await AppDataSource.getRepository(Product).save(product);
