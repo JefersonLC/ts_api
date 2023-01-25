@@ -1,6 +1,7 @@
 import { Boom } from '@hapi/boom';
 import { Request, Response, NextFunction } from 'express';
 import Joi from 'joi';
+import { MulterError } from 'multer';
 import { QueryFailedError } from 'typeorm';
 
 export function logError(
@@ -56,6 +57,22 @@ export function syntaxError(
       error: err.name,
       message: 'Unexpected format',
       status: 400,
+    });
+  }
+  next(err);
+}
+
+export function multerError(
+  err: MulterError,
+  _req: Request,
+  res: Response,
+  next: NextFunction
+): void {
+  if (err instanceof MulterError) {
+    res.status(400).json({
+      error: err.name,
+      message: err.message,
+      field: err.field,
     });
   }
   next(err);
