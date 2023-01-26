@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { Request as ReqSSC } from 'express-serve-static-core';
 import boom from '@hapi/boom';
 import { Product } from '../db/entities/Product';
 import ProductService from '../services/ProductService';
@@ -34,13 +35,13 @@ export async function getProductById(
 }
 
 export async function createProduct(
-  req: Request,
+  req: ReqSSC,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
     const data: NewProduct = req.body;
-    const image: Express.Multer.File | undefined = req.file;
+    const image = req.file;
     if (!image) {
       throw boom.badRequest('An image was expected');
     }
