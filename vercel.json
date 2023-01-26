@@ -12,8 +12,8 @@
   "routes": [
     {
       "methods": ["GET", "POST"],
-      "src": "/api/store/.*",
-      "dest": "build"
+      "src": "/api/store.*",
+      "dest": "/api/store"
     }
   ]
 }
