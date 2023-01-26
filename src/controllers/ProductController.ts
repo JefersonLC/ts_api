@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-import { Request as ReqSSC } from 'express-serve-static-core';
 import boom from '@hapi/boom';
 import { Product } from '../db/entities/Product';
 import ProductService from '../services/ProductService';
@@ -35,7 +34,7 @@ export async function getProductById(
 }
 
 export async function createProduct(
-  req: ReqSSC,
+  req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
