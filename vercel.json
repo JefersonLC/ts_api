@@ -1,11 +1,19 @@
 {
+  "version": 2,
   "builds": [
     {
-      "src": "*.ts",
-      "use": "@vercel/node",
+      "src": "src/index.ts",
+      "use": "@vercel/node-server",
       "config": {
         "distDir": "build"
       }
+    }
+  ],
+  "routes": [
+    {
+      "handle": "filesystem",
+      "src": "/.*",
+      "dest": "src/index.ts"
     }
   ]
 }
