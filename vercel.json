@@ -1,7 +1,7 @@
 {
   "builds": [
     {
-      "src": "*.ts",
+      "src": "src/*.ts",
       "use": "@vercel/node",
       "config": {
         "distDir": "build"
