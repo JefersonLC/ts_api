@@ -1,13 +1,5 @@
 {
-  "builds": [
-    {
-      "src": "src/*.ts",
-      "use": "@vercel/node",
-      "config": {
-        "distDir": "build"
-      }
-    }
-  ],
+  "version": 2,
   "routes": [
     {
       "src": "/(.*)",
