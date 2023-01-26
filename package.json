@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "nodemon src/index.ts",
     "build": "rimraf build && tsc",
-    "build:prod": "npm install && npm run build",
     "start": "node build/index.js"
   },
   "keywords": [
