@@ -12,8 +12,8 @@
   "routes": [
     {
       "methods": ["GET", "POST"],
-      "src": "/.*",
-      "dest": "src/index.ts"
+      "src": "/api/store/.*",
+      "dest": "build"
     }
   ]
 }
