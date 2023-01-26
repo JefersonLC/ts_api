@@ -1,8 +1,7 @@
 {
-  "version": 2,
   "builds": [
     {
-      "src": "src/index.ts",
+      "src": "*.ts",
       "use": "@vercel/node",
       "config": {
         "distDir": "build"
@@ -12,8 +11,8 @@
   "routes": [
     {
       "methods": ["GET", "POST"],
-      "src": "/api/store.*",
-      "dest": "/api/store"
+      "src": "/.*",
+      "dest": "build/index.js"
     }
   ]
 }
