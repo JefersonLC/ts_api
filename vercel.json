@@ -10,7 +10,6 @@
   ],
   "routes": [
     {
-      "methods": ["GET", "POST"],
       "src": "/(.*)",
       "dest": "/index.js"
     }
