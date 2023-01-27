@@ -1,7 +1,7 @@
 {
   "name": "api-tsc",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
     "build": "rimraf build && tsc",
